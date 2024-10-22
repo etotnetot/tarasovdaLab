@@ -10,8 +10,8 @@ public class BankServiceImpl implements BankService {
      * Создание нового банка.
      */
     @Override
-    public void create(Bank newUser) {
-        this.bank = newUser;
+    public void create(Bank newBank) {
+        this.bank = newBank;
     }
 
     /**
@@ -31,9 +31,9 @@ public class BankServiceImpl implements BankService {
      * Обновление данных банка.
      */
     @Override
-    public void update(Bank newUser) {
-        if (this.bank != null && this.bank.getId() == newUser.getId()) {
-            this.bank = newUser;
+    public void update(Bank newBank) {
+        if (this.bank != null && this.bank.getId() == newBank.getId()) {
+            this.bank = newBank;
         }
     }
 

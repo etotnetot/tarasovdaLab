@@ -10,8 +10,8 @@ public class BankOfficeServiceImpl implements BankOfficeService {
      * Создание нового офиса.
      */
     @Override
-    public void create(BankOffice newUser) {
-        this.office = newUser;
+    public void create(BankOffice newOffice) {
+        this.office = newOffice;
     }
 
     /**
@@ -31,9 +31,9 @@ public class BankOfficeServiceImpl implements BankOfficeService {
      * Обновление данных офиса.
      */
     @Override
-    public void update(BankOffice newUser) {
-        if (this.office != null && this.office.getId() == newUser.getId()) {
-            this.office = newUser;
+    public void update(BankOffice newOffice) {
+        if (this.office != null && this.office.getId() == newOffice.getId()) {
+            this.office = newOffice;
         }
     }
 

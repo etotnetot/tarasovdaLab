@@ -10,8 +10,8 @@ public class CreditAccountServiceImpl implements CreditAccountService {
      * Создание нового кредитный счета.
      */
     @Override
-    public void create(CreditAccount newUser) {
-        this.creditAccount = newUser;
+    public void create(CreditAccount newCreditAccount) {
+        this.creditAccount = newCreditAccount;
     }
 
     /**
@@ -31,9 +31,9 @@ public class CreditAccountServiceImpl implements CreditAccountService {
      * Обновление данных кредитный счета.
      */
     @Override
-    public void update(CreditAccount newUser) {
-        if (this.creditAccount != null && this.creditAccount.getId() == newUser.getId()) {
-            this.creditAccount = newUser;
+    public void update(CreditAccount newCreditAccount) {
+        if (this.creditAccount != null && this.creditAccount.getId() == newCreditAccount.getId()) {
+            this.creditAccount = newCreditAccount;
         }
     }
 
