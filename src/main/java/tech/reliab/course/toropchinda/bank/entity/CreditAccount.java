@@ -18,39 +18,41 @@ public class CreditAccount {
 
     /**
      * Конструктор класса CreditAccount
-     * @param id ID аккаунта
      * @param user Пользователь, за которым закреплен этот кредитный счет
      * @param startDate Дата начала кредита
-     * @param endDate Дата окончания кредита
      * @param loanTermInMonths Кол-во месяцев, на которые взят кредит
-     * @param loanAmount Сумма кредита
-     * @param monthlyPayment Ежемесячный платеж
      * @param interestRate Процентная ставка
      * @param employee Сотрудник, который выдал кредит
      * @param paymentAccount Платежный счет в банке с которого будет осуществляться погашение данного кредита
      */
-    public CreditAccount(int id, User user, Bank bank, LocalDate startDate, LocalDate endDate,
-                         int loanTermInMonths, double loanAmount, double monthlyPayment, double interestRate,
+    public CreditAccount(User user, Bank bank, LocalDate startDate,
+                         int loanTermInMonths, double interestRate,
                          Employee employee, PaymentAccount paymentAccount) {
-        this.id = id;
         this.user = user;
         this.bankName = bank.getName();
         this.startDate = startDate;
-        this.endDate = endDate;
         this.loanTermInMonths = loanTermInMonths;
-        this.loanAmount = loanAmount;
-        this.monthlyPayment = monthlyPayment;
         this.interestRate = bank.getInterestRate();
         this.employee = employee;
         this.paymentAccount = paymentAccount;
         this.bank = bank;
     }
 
-    /**
-     * Получение Id.
-     * @return Идентификатор
-     */
     public int getId() { return this.id; }
+
+    public User getUser() { return this.user; }
+
+    public void setId(int id) { this.id = id; }
+
+    public void setEndDate(LocalDate date) { this.endDate = date; }
+
+    public void setLoanAmount(double amount) { this.loanAmount = amount; }
+
+    public void setMonthlyPayment(double payment) { this.monthlyPayment = payment; }
+
+    public void setInterestRate(double rate) { this.interestRate = rate; }
+
+    public void setBank(Bank bank) { this.bank = bank; }
 
     /**
      * Переопределение метода toString() для аккаунта.

@@ -16,48 +16,43 @@ public class Bank {
      * @param id Уникальный идентификатор банка
      * @param name Название банка
      */
-    public Bank(int id, String name) {
+    public Bank(int id, String name, int rating, double totalMoney, double interestRate) {
         this.id = id;
         this.name = name;
-        this.officesCount = 0;
-        this.atmsCount = 0;
-        this.employeesCount = 0;
-        this.clientsCount = 0;
+        this.rating = rating;
+        this.totalMoney = totalMoney;
+        this.interestRate = interestRate;
 
         this.rating = (int) (Math.random() * 101);
         this.totalMoney = Math.random() * 1000000;
         this.interestRate = Math.max(0, 20 - (rating / 5.0));
     }
 
-    /**
-     * Получение Id.
-     * @return Идентификатор
-     */
+    public void setName(String name) { this.name = name; }
+
+    public void setOfficeCount(int count) { officesCount = count; }
+
+    public void setAtmCount(int count) { atmsCount = count; }
+
+    public void setClientCount(int count) { clientsCount = count; }
+
+    public void setEmployeeCount(int count) { employeesCount = count; }
+
     public int getId() { return this.id; }
 
-    /**
-     * Получение названия банка.
-     * @return Название банка.
-     */
     public String getName() { return name; }
 
-    /**
-     * Получение общего количества денег.
-     * @return Общее количество денег.
-     */
     public double getTotalMoney() { return totalMoney; }
 
-    /**
-     * Получение общего количества денег.
-     * @return Общее количество денег.
-     */
     public double getInterestRate() { return interestRate; }
 
-    /**
-     * Получение общего количества денег.
-     * @return Общее количество денег.
-     */
-    public double getAtmCount() { return atmsCount; }
+    public int getEmployeeCount() { return employeesCount; }
+
+    public int getOfficeCount() { return officesCount; }
+
+    public int getClientCount() { return clientsCount; }
+
+    public int getAtmCount() { return atmsCount; }
 
     /**
      * Переопределение метода toString() для банка.

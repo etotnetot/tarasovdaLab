@@ -17,7 +17,6 @@ public class BankAtm {
 
     /**
      * Конструктор класса BankAtm
-     * @param id ID банкомата
      * @param name Имя банкомата
      * @param address Адрес банка
      * @param bank Банк, которому принадлежит банкомат
@@ -27,8 +26,7 @@ public class BankAtm {
      * @param canDeposit Можно ли внести деньги
      * @param maintenanceCost Стоимость обслуживания банкомата
      */
-    public BankAtm(int id, String name, String address, Bank bank, String location, Employee employee, boolean canWithdraw, boolean canDeposit, double maintenanceCost) {
-        this.id = id;
+    public BankAtm(String name, String address, Bank bank, String location, Employee employee, boolean canWithdraw, boolean canDeposit, double maintenanceCost) {
         this.name = name;
         this.address = address;
         this.status = BankStatus.WORKING;
@@ -41,16 +39,18 @@ public class BankAtm {
         this.maintenanceCost = maintenanceCost;
     }
 
-    /**
-     * Получение Id.
-     * @return Идентификатор
-     */
     public int getId() { return this.id; }
 
-    /**
-     * Переопределение метода toString() для банкомата.
-     * @return Информация об обьекте
-     */
+    public Bank getBank() { return this.bank; }
+
+    public void setId(int id) { this.id = id; }
+
+    public void setStatus(BankStatus status) { this.status = status; }
+
+    public void setBalance(double balance) { this.balance = balance; }
+
+    public void setName(String name) { this.name = name; }
+
     @Override
     public String toString() {
         return "Информация о банкомате " + this.name + ":\n" +

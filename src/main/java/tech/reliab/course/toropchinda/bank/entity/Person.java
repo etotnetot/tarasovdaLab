@@ -9,25 +9,15 @@ public abstract class Person {
 
     /**
      * Конструктор класса Person
-     * @param id ID человека
      * @param fullName ФИО человека
      * @param birthDate Дата рождения человека
      */
-    public Person(int id, String fullName, LocalDate birthDate) {
-        this.id = id;
+    public Person(String fullName, LocalDate birthDate) {
         this.fullName = fullName;
         this.birthDate = birthDate;
     }
 
-    /**
-     * Получение Id.
-     * @return Идентификатор
-     */
     public int getId() { return this.id; }
 
-    /**
-     * Получение имени.
-     * @return ФИО
-     */
     public String getFullName() { return this.fullName; }
 }

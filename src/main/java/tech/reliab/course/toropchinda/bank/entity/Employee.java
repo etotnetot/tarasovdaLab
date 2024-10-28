@@ -1,6 +1,7 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Employee extends Person {
     private String job;
@@ -11,17 +12,28 @@ public class Employee extends Person {
     private boolean canIssueLoans;
     private double salary;
 
-    public Employee(int id, String name, LocalDate birthDate, String job, Bank bank,
-                    String position, boolean worksInOffice, BankOffice bankOffice,
+    public Employee(String name, LocalDate birthDate, String job, Bank bank,
+                     boolean worksInOffice, BankOffice bankOffice,
                     boolean canIssueLoans, double salary) {
-        super(id, name, birthDate);
+        super(name, birthDate);
         this.job = job;
-        this.position = position;
         this.bank = bank;
         this.worksInOffice = worksInOffice;
         this.bankOffice = bankOffice;
         this.canIssueLoans = canIssueLoans;
         this.salary = salary;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Bank getBank() {
+       return this.bank;
     }
 
     /**

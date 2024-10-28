@@ -18,12 +18,11 @@ public class BankOffice {
 
     /**
      * Конструктор класса BankOffice
-     * @param id ID банковского офиса
      * @param name Название офиса
      * @param address Адрес банковского офиса
      * @param bank Банк, которому принадлежит офис
      */
-    public BankOffice(int id, String name, String address, Bank bank, int rentCost) {
+    public BankOffice(String name, String address, Bank bank, double rentCost) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -38,32 +37,34 @@ public class BankOffice {
         this.rentCost = rentCost;
     }
 
-    /**
-     * Получение Id.
-     * @return Идентификатор
-     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setStatus(BankStatus status) {
+        this.status = status;
+    }
+
+    public void setOfficeMoney(double money) {
+        this.balance = money;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getId() { return this.id; }
 
-    /**
-     * Получение адреса офиса.
-     * @return Адрес
-     */
+    public int getBankId() { return this.bank.getId(); }
+
     public String getAddress() {
         return this.address;
     }
 
-    /**
-     * Получение имени офиса.
-     * @return Имя
-     */
     public String getName() {
         return this.name;
     }
 
-    /**
-     * Переопределение метода toString() для офиса.
-     * @return Информация об обьекте
-     */
     @Override
     public String toString() {
         return "Id банковского офиса: " + id + "\n" +
