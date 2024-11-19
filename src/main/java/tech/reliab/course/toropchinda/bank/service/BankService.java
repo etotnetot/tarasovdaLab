@@ -2,10 +2,35 @@ package tech.reliab.course.toropchinda.bank.service;
 
 import tech.reliab.course.toropchinda.bank.entity.Bank;
 
-public interface BankService extends CrudOperations<Bank> {
-    void addOffice();
+import java.util.List;
+import java.util.Optional;
 
-    void addAtm();
+public interface BankService {
+    void registerBank(Bank bank);
 
-    void removeAtm();
+    Optional<Bank> getBankById(int id);
+
+    List<Bank> getAllBanks();
+
+    void updateBank(int id, String name);
+
+    void deleteBank(int id);
+
+    int addOffice(int id);
+
+    int addAtm(int id);
+
+    int addEmployee(int id);
+
+    int addClient(int id);
+
+    int removeOffice(int id);
+
+    int removeAtm(int id);
+
+    int removeEmployee(int id);
+
+    int removeClient(int id);
+
+    Bank getBankIfExists(int id);
 }

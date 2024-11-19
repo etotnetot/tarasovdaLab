@@ -1,5 +1,10 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Bank {
     private int id;
     private String name;
@@ -16,48 +21,17 @@ public class Bank {
      * @param id Уникальный идентификатор банка
      * @param name Название банка
      */
-    public Bank(int id, String name) {
+    public Bank(int id, String name, int rating, double totalMoney, double interestRate) {
         this.id = id;
         this.name = name;
-        this.officesCount = 0;
-        this.atmsCount = 0;
-        this.employeesCount = 0;
-        this.clientsCount = 0;
+        this.rating = rating;
+        this.totalMoney = totalMoney;
+        this.interestRate = interestRate;
 
         this.rating = (int) (Math.random() * 101);
         this.totalMoney = Math.random() * 1000000;
         this.interestRate = Math.max(0, 20 - (rating / 5.0));
     }
-
-    /**
-     * Получение Id.
-     * @return Идентификатор
-     */
-    public int getId() { return this.id; }
-
-    /**
-     * Получение названия банка.
-     * @return Название банка.
-     */
-    public String getName() { return name; }
-
-    /**
-     * Получение общего количества денег.
-     * @return Общее количество денег.
-     */
-    public double getTotalMoney() { return totalMoney; }
-
-    /**
-     * Получение общего количества денег.
-     * @return Общее количество денег.
-     */
-    public double getInterestRate() { return interestRate; }
-
-    /**
-     * Получение общего количества денег.
-     * @return Общее количество денег.
-     */
-    public double getAtmCount() { return atmsCount; }
 
     /**
      * Переопределение метода toString() для банка.

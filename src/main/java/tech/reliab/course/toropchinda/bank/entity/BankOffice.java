@@ -2,6 +2,11 @@ package tech.reliab.course.toropchinda.bank.entity;
 
 import tech.reliab.course.toropchinda.bank.enums.BankStatus;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class BankOffice {
     private int id;
     private String name;
@@ -18,12 +23,11 @@ public class BankOffice {
 
     /**
      * Конструктор класса BankOffice
-     * @param id ID банковского офиса
      * @param name Название офиса
      * @param address Адрес банковского офиса
      * @param bank Банк, которому принадлежит офис
      */
-    public BankOffice(int id, String name, String address, Bank bank, int rentCost) {
+    public BankOffice(String name, String address, Bank bank, double rentCost) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -38,32 +42,8 @@ public class BankOffice {
         this.rentCost = rentCost;
     }
 
-    /**
-     * Получение Id.
-     * @return Идентификатор
-     */
-    public int getId() { return this.id; }
+    public int getBankId() { return this.bank.getId(); }
 
-    /**
-     * Получение адреса офиса.
-     * @return Адрес
-     */
-    public String getAddress() {
-        return this.address;
-    }
-
-    /**
-     * Получение имени офиса.
-     * @return Имя
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * Переопределение метода toString() для офиса.
-     * @return Информация об обьекте
-     */
     @Override
     public String toString() {
         return "Id банковского офиса: " + id + "\n" +

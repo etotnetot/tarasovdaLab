@@ -1,7 +1,11 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
 import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Employee extends Person {
     private String job;
     private String position;
@@ -11,12 +15,11 @@ public class Employee extends Person {
     private boolean canIssueLoans;
     private double salary;
 
-    public Employee(int id, String name, LocalDate birthDate, String job, Bank bank,
-                    String position, boolean worksInOffice, BankOffice bankOffice,
+    public Employee(String name, LocalDate birthDate, String job, Bank bank,
+                     boolean worksInOffice, BankOffice bankOffice,
                     boolean canIssueLoans, double salary) {
-        super(id, name, birthDate);
+        super(name, birthDate);
         this.job = job;
-        this.position = position;
         this.bank = bank;
         this.worksInOffice = worksInOffice;
         this.bankOffice = bankOffice;

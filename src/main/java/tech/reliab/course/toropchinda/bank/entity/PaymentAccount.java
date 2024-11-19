@@ -1,5 +1,10 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class PaymentAccount {
     private int id;
     private User user;
@@ -9,24 +14,13 @@ public class PaymentAccount {
 
     /**
      * Конструктор класса PaymentAccount
-     * @param id ID платежного счета
      * @param user Пользователь, за которым закреплен этот платежный счет
      * @param bank Банк, в котором открыт этот счет
      */
-    public PaymentAccount(int id, User user, String bankName, Bank bank) {
-        this.id = id;
+    public PaymentAccount(User user, Bank bank) {
         this.user = user;
-        this.bankName = bankName;
         this.balance = 0;
         this.bank = bank;
-    }
-
-    /**
-     * Получение идентификатора.
-     * @return ID
-     */
-    public int getId() {
-        return this.id;
     }
 
     /**
