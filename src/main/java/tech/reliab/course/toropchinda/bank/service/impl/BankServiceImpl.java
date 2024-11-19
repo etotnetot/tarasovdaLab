@@ -62,9 +62,9 @@ public class BankServiceImpl implements BankService {
      */
     public int addOffice(int id) {
         var bank = getBankIfExists(id);
-        bank.setOfficeCount(bank.getOfficeCount() + 1);
+        bank.setOfficesCount(bank.getOfficesCount() + 1);
 
-        return bank.getOfficeCount();
+        return bank.getOfficesCount();
     }
 
     /**
@@ -72,9 +72,9 @@ public class BankServiceImpl implements BankService {
      */
     public int addAtm(int id) {
         var bank = getBankIfExists(id);
-        bank.setAtmCount(bank.getAtmCount() + 1);
+        bank.setAtmsCount(bank.getAtmsCount() + 1);
 
-        return bank.getAtmCount();
+        return bank.getAtmsCount();
     }
 
     /**
@@ -82,9 +82,9 @@ public class BankServiceImpl implements BankService {
      */
     public int removeAtm(int id) {
         var bank = getBankIfExists(id);
-        bank.setAtmCount(bank.getAtmCount() - 1);
+        bank.setAtmsCount(bank.getAtmsCount() - 1);
 
-        return bank.getAtmCount();
+        return bank.getAtmsCount();
     }
 
     /**
@@ -112,8 +112,8 @@ public class BankServiceImpl implements BankService {
      */
     public int addEmployee(int id) {
         var bank = getBankIfExists(id);
-        bank.setEmployeeCount(bank.getEmployeeCount() + 1);
-        return bank.getEmployeeCount();
+        bank.setEmployeesCount(bank.getEmployeesCount() + 1);
+        return bank.getEmployeesCount();
     }
 
     /**
@@ -123,8 +123,8 @@ public class BankServiceImpl implements BankService {
      */
     public int addClient(int id) {
         var bank = getBankIfExists(id);
-        bank.setClientCount(bank.getClientCount() + 1);
-        return bank.getClientCount();
+        bank.setClientsCount(bank.getClientsCount() + 1);
+        return bank.getClientsCount();
     }
 
     /**
@@ -134,8 +134,8 @@ public class BankServiceImpl implements BankService {
      */
     public int removeOffice(int id) {
         var bank = getBankIfExists(id);
-        bank.setOfficeCount(bank.getOfficeCount() - 1);
-        return bank.getOfficeCount();
+        bank.setOfficesCount(bank.getOfficesCount() - 1);
+        return bank.getOfficesCount();
     }
 
     /**
@@ -145,8 +145,8 @@ public class BankServiceImpl implements BankService {
      */
     public int removeEmployee(int id) {
         var bank = getBankIfExists(id);
-        bank.setEmployeeCount(bank.getEmployeeCount() - 1);
-        return bank.getEmployeeCount();
+        bank.setEmployeesCount(bank.getEmployeesCount() - 1);
+        return bank.getEmployeesCount();
     }
 
     /**
@@ -156,7 +156,7 @@ public class BankServiceImpl implements BankService {
      */
     public int removeClient(int id) {
         var bank = getBankIfExists(id);
-        bank.setClientCount(bank.getClientCount() - 1);
-        return bank.getClientCount();
+        bank.setClientsCount(bank.getClientsCount() - 1);
+        return bank.getClientsCount();
     }
 }

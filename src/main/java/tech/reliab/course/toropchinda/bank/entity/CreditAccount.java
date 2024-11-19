@@ -2,6 +2,11 @@ package tech.reliab.course.toropchinda.bank.entity;
 
 import java.time.LocalDate;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class CreditAccount {
     private int id;
     private User user;
@@ -37,22 +42,6 @@ public class CreditAccount {
         this.paymentAccount = paymentAccount;
         this.bank = bank;
     }
-
-    public int getId() { return this.id; }
-
-    public User getUser() { return this.user; }
-
-    public void setId(int id) { this.id = id; }
-
-    public void setEndDate(LocalDate date) { this.endDate = date; }
-
-    public void setLoanAmount(double amount) { this.loanAmount = amount; }
-
-    public void setMonthlyPayment(double payment) { this.monthlyPayment = payment; }
-
-    public void setInterestRate(double rate) { this.interestRate = rate; }
-
-    public void setBank(Bank bank) { this.bank = bank; }
 
     /**
      * Переопределение метода toString() для аккаунта.

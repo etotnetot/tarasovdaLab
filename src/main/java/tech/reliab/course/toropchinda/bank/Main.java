@@ -69,7 +69,8 @@ public class Main {
         var bankId = scanner.nextInt();
 
         var selectedBank = bankSrv.getBankById(bankId);
-        if (selectedBank.isEmpty()) return;
+        if (selectedBank.isEmpty())
+            return;
 
         System.out.println(selectedBank.get());
 

@@ -1,5 +1,10 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class PaymentAccount {
     private int id;
     private User user;
@@ -17,18 +22,6 @@ public class PaymentAccount {
         this.balance = 0;
         this.bank = bank;
     }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public User getUser() { return this.user; }
-
-    public void setBank(Bank bank) { this.bank = bank; }
 
     /**
      * Переопределение метода toString() для аккаунта.

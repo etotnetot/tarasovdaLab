@@ -2,6 +2,11 @@ package tech.reliab.course.toropchinda.bank.entity;
 
 import tech.reliab.course.toropchinda.bank.enums.BankStatus;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class BankAtm {
     private int id;
     private String name;
@@ -38,18 +43,6 @@ public class BankAtm {
         this.balance = bank.getTotalMoney();
         this.maintenanceCost = maintenanceCost;
     }
-
-    public int getId() { return this.id; }
-
-    public Bank getBank() { return this.bank; }
-
-    public void setId(int id) { this.id = id; }
-
-    public void setStatus(BankStatus status) { this.status = status; }
-
-    public void setBalance(double balance) { this.balance = balance; }
-
-    public void setName(String name) { this.name = name; }
 
     @Override
     public String toString() {

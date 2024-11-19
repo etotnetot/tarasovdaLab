@@ -1,8 +1,11 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
 import java.time.LocalDate;
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Employee extends Person {
     private String job;
     private String position;
@@ -22,18 +25,6 @@ public class Employee extends Person {
         this.bankOffice = bankOffice;
         this.canIssueLoans = canIssueLoans;
         this.salary = salary;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Bank getBank() {
-       return this.bank;
     }
 
     /**

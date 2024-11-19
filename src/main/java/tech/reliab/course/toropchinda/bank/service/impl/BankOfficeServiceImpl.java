@@ -28,7 +28,7 @@ public class BankOfficeServiceImpl implements BankOfficeService {
         BankOffice bankOffice = new BankOffice(name, address, bank, rentCost);
         bankOffice.setId(bankOfficesCount++);
         bankOffice.setStatus(generateStatus());
-        bankOffice.setOfficeMoney(generateOfficeMoney(bank));
+        bankOffice.setBalance(generateOfficeMoney(bank));
         bankOffices.add(bankOffice);
         bankService.addOffice(bank.getId());
 

@@ -3,7 +3,11 @@ package tech.reliab.course.toropchinda.bank.entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class User extends Person {
     protected String workplace;
     protected double monthlyIncome;
@@ -25,39 +29,6 @@ public class User extends Person {
         this.workplace = workplace;
         this.monthlyIncome = Math.random() * 10000;
     }
-    public int getId() { return this.id; }
-
-    public double getMonthlyIncome() { return this.monthlyIncome; }
-
-    public List<CreditAccount> getCreditAccounts() { return this.creditAccounts; }
-
-    public List<PaymentAccount> getPaymentAccounts() { return this.paymentAccounts; }
-
-    public List<Bank> getBanks() { return this.banks; }
-
-    public void setCreditAccounts(List<CreditAccount> creditAccounts) {
-        this.creditAccounts = creditAccounts;
-    }
-
-    public void setBanks(List<Bank> banks) {
-        this.banks = banks;
-    }
-
-    public void setCreditRating(int creditRating) {
-        this.creditRating = creditRating;
-    }
-
-    public void setPaymentAccounts(List<PaymentAccount> paymentAccounts) { this.paymentAccounts = paymentAccounts; }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public void setMonthlyIncome(int income) { this.monthlyIncome = income; }
 
     /**
      * Переопределение метода toString для User

@@ -2,6 +2,13 @@ package tech.reliab.course.toropchinda.bank.entity;
 
 import java.time.LocalDate;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 public abstract class Person {
     protected int id;
     protected String fullName;
@@ -16,8 +23,4 @@ public abstract class Person {
         this.fullName = fullName;
         this.birthDate = birthDate;
     }
-
-    public int getId() { return this.id; }
-
-    public String getFullName() { return this.fullName; }
 }
