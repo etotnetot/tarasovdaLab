@@ -3,18 +3,15 @@ package tech.reliab.course.toropchinda.bank.service;
 import tech.reliab.course.toropchinda.bank.entity.Bank;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BankService {
     void registerBank(Bank bank);
 
-    Optional<Bank> getBankById(int id);
+    Bank getBankById(long id);
 
     List<Bank> getAllBanks();
 
-    void updateBank(int id, String name);
-
-    void deleteBank(int id);
+    void deleteBank(long id);
 
     int addOffice(int id);
 

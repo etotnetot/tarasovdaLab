@@ -1,48 +1,31 @@
 package tech.reliab.course.toropchinda.bank.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tech.reliab.course.toropchinda.bank.entity.Bank;
+import tech.reliab.course.toropchinda.bank.repository.BankRepository;
 import tech.reliab.course.toropchinda.bank.service.BankService;
-import tech.reliab.course.toropchinda.bank.service.UserService;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
+@Service
 public class BankServiceImpl implements BankService {
-    private final UserService userService;
-    private List<Bank> banks = new ArrayList<>();
-
-    public BankServiceImpl(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private BankRepository bankRepository;
 
     @Override
     public void registerBank(Bank bank) {
-        if (getBankById(bank.getId()).isPresent())
-            return;
-
-        banks.add(bank);
+        bankRepository.save(bank);
     }
 
     /**
      * Чтение данных банка.
+     *
      * @param id Идентификатор банка
      */
     @Override
-    public Optional<Bank> getBankById(int id) {
-        return banks.stream()
-                .filter(bank -> bank.getId() == id)
-                .findFirst();
-    }
-
-    /**
-     * Обновление данных банка.
-     */
-    @Override
-    public void updateBank(int id, String name) {
-        Bank bank = getBankIfExists(id);
-        bank.setName(name);
+    public Bank getBankById(long id) {
+        return bankRepository.findById(id).orElse(null);
     }
 
     /**
@@ -50,11 +33,8 @@ public class BankServiceImpl implements BankService {
      * @param id Идентификатор банка
      */
     @Override
-
-    public void deleteBank(int id) {
-        Bank bank = getBankIfExists(id);
-        banks.remove(bank);
-        userService.deleteBank(bank);
+    public void deleteBank(long id) {
+        bankRepository.deleteById(id);
     }
 
     /**
@@ -92,7 +72,7 @@ public class BankServiceImpl implements BankService {
      * @return Список всех банков
      */
     public List<Bank> getAllBanks() {
-        return new ArrayList<>(banks);
+        return bankRepository.findAll();
     }
 
     /**
@@ -102,7 +82,7 @@ public class BankServiceImpl implements BankService {
      * @throws NoSuchElementException если банк не найден
      */
     public Bank getBankIfExists(int id) throws NoSuchElementException {
-        return getBankById(id).orElseThrow(() -> new NoSuchElementException("Bank was not found"));
+        return getBankById(id);
     }
 
     /**

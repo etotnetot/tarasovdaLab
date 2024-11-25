@@ -1,28 +1,20 @@
 package tech.reliab.course.toropchinda.bank.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tech.reliab.course.toropchinda.bank.entity.Bank;
 import tech.reliab.course.toropchinda.bank.entity.*;
-import tech.reliab.course.toropchinda.bank.service.BankService;
+import tech.reliab.course.toropchinda.bank.repository.CreditAccountRepository;
 import tech.reliab.course.toropchinda.bank.service.CreditAccountService;
-import tech.reliab.course.toropchinda.bank.service.UserService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
 public class CreditAccountServiceImpl implements CreditAccountService {
-    private static int creditAccountsCount = 0;
-
-    private final UserService userService;
-
-    private final List<CreditAccount> creditAccounts = new ArrayList<>();
-
-    public CreditAccountServiceImpl(UserService userService, BankService bankService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private CreditAccountRepository creditAccountRepository;
 
     /**
      * Создание нового кредитный счета.
@@ -33,15 +25,12 @@ public class CreditAccountServiceImpl implements CreditAccountService {
                                               PaymentAccount paymentAccount) {
         CreditAccount creditAccount = new CreditAccount(user, bank, startDate, loanTermMonths,
                 interestRate, employee, paymentAccount);
-        creditAccount.setId(creditAccountsCount++);
         creditAccount.setEndDate(calculateEndDate(startDate, loanTermMonths));
         creditAccount.setLoanAmount(calculateLoanAmount(loanAmount, bank));
         creditAccount.setMonthlyPayment(calculateMonthlyPayment(interestRate, loanAmount, loanTermMonths));
         creditAccount.setInterestRate(calculateInterestRate(interestRate, bank));
-        creditAccounts.add(creditAccount);
-        userService.addCreditAccount(creditAccount, user);
 
-        return creditAccount;
+        return creditAccountRepository.save(creditAccount);
     }
 
     /**
@@ -49,10 +38,8 @@ public class CreditAccountServiceImpl implements CreditAccountService {
      * @param id Идентификатор кредитный счета
      */
     @Override
-    public Optional<CreditAccount> getCreditAccountById(int id) {
-        return creditAccounts.stream()
-                .filter(creditAccount -> creditAccount.getId() == id)
-                .findFirst();
+    public CreditAccount getCreditAccountById(long id) {
+        return creditAccountRepository.findById(id).orElse(null);
     }
 
     /**
@@ -62,17 +49,6 @@ public class CreditAccountServiceImpl implements CreditAccountService {
     public void updateCreditAccount(int id, Bank bank) {
         CreditAccount creditAccount = getCreditAccountIfExists(id);
         creditAccount.setBank(bank);
-    }
-
-    /**
-     * Удаление кредитного счета.
-     */
-    @Override
-    public void deleteCreditAccount(int accountId, int userId) {
-        CreditAccount creditAccount = getCreditAccountIfExists(accountId);
-        creditAccounts.remove(creditAccount);
-        User user = userService.getUserIfExists(userId);
-        userService.deleteCreditAccount(creditAccount, user);
     }
 
     /**
@@ -132,7 +108,7 @@ public class CreditAccountServiceImpl implements CreditAccountService {
      */
     @Override
     public List<CreditAccount> getCreditAccountByUserId(int userId) {
-        return creditAccounts.stream()
+        return creditAccountRepository.findAll().stream()
                 .filter(account -> account.getUser().getId() == userId)
                 .collect(Collectors.toList());
     }
@@ -142,7 +118,7 @@ public class CreditAccountServiceImpl implements CreditAccountService {
      * @return Список всех кредитных аккаунтов
      */
     public List<CreditAccount> getAllCreditAccounts() {
-        return new ArrayList<>(creditAccounts);
+        return creditAccountRepository.findAll();
     }
 
     /**
@@ -151,6 +127,6 @@ public class CreditAccountServiceImpl implements CreditAccountService {
      * @return Кредитный аккаунт, если найден, иначе выбрасывается исключение
      */
     private CreditAccount getCreditAccountIfExists(int id) {
-        return getCreditAccountById(id).orElseThrow(() -> new NoSuchElementException("CreditAccount was not found"));
+        return getCreditAccountById(id);
     }
 }

@@ -1,16 +1,21 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
 import java.time.LocalDate;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
 public class Employee extends Person {
     private String job;
     private String position;
+    @ManyToOne
     private Bank bank;
     private boolean worksInOffice;
+    @ManyToOne
     private BankOffice bankOffice;
     private boolean canIssueLoans;
     private double salary;
@@ -26,6 +31,8 @@ public class Employee extends Person {
         this.canIssueLoans = canIssueLoans;
         this.salary = salary;
     }
+
+    public Employee() { }
 
     /**
      * Переопределение метода toString() для сотрудника.

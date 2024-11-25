@@ -1,7 +1,7 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
 import java.time.LocalDate;
-
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,7 +9,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@MappedSuperclass
 public abstract class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected int id;
     protected String fullName;
     protected LocalDate birthDate;
@@ -23,4 +26,6 @@ public abstract class Person {
         this.fullName = fullName;
         this.birthDate = birthDate;
     }
+
+    public Person() { }
 }

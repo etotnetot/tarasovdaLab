@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface AtmService {
     BankAtm createBankAtm(String name,
-                          String address, Bank bank, BankOffice location, Employee employee,
+                          String address, Bank bank, String location, Employee employee,
                           boolean cashWithdrawal, boolean cashDeposit, double maintenanceCost);
 
     Optional<BankAtm> getAtmById(int id);

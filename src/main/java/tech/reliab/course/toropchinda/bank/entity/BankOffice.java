@@ -1,13 +1,18 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import tech.reliab.course.toropchinda.bank.enums.BankStatus;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
 public class BankOffice {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter(AccessLevel.NONE)
     private int id;
     private String name;
     private String address;
@@ -19,6 +24,7 @@ public class BankOffice {
     private boolean canDeposit;
     private double balance;
     private double rentCost;
+    @ManyToOne
     private Bank bank;
 
     /**
@@ -41,6 +47,8 @@ public class BankOffice {
         this.balance = bank.getTotalMoney();
         this.rentCost = rentCost;
     }
+
+    public BankOffice() { }
 
     public int getBankId() { return this.bank.getId(); }
 

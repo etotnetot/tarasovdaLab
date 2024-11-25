@@ -1,28 +1,23 @@
 package tech.reliab.course.toropchinda.bank.service.impl;
 
+import org.springframework.stereotype.Service;
 import tech.reliab.course.toropchinda.bank.entity.Bank;
 import tech.reliab.course.toropchinda.bank.entity.BankOffice;
 import tech.reliab.course.toropchinda.bank.entity.Employee;
-import tech.reliab.course.toropchinda.bank.service.BankService;
+import tech.reliab.course.toropchinda.bank.repository.EmployeeRepository;
 import tech.reliab.course.toropchinda.bank.service.EmployeeService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
-    private static int employeesCount = 0;
-
-    private final BankService bankService;
-
-    private final List<Employee> employees = new ArrayList<>();
-
-    public EmployeeServiceImpl(BankService bankService) {
-        this.bankService = bankService;
-    }
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     /**
      * Создание нового сотрудника.
@@ -46,10 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 canIssueLoans,
                 salary);
 
-        employee.setId(employeesCount++);
-        employees.add(employee);
-        bankService.addEmployee(bank.getId());
-        return employee;
+        return employeeRepository.save(employee);
     }
 
     /**
@@ -76,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void deleteEmployee(int id) {
-        employees.remove(getEmployeeIfExists(id));
+        employeeRepository.delete(getEmployeeIfExists(id));
     }
 
     /**
@@ -85,7 +77,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return Optional с сотрудником, если найден, или пустой Optional, если нет
      */
     public Optional<Employee> getEmployeeById(int id) {
-        return employees.stream().filter(employee -> employee.getId() == id).findFirst();
+        return employeeRepository.findAll().stream().filter(employee -> employee.getId() == id).findFirst();
     }
 
     /**
@@ -93,7 +85,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return Список всех сотрудников
      */
     public List<Employee> getAllEmployees() {
-        return new ArrayList<>(employees);
+        return employeeRepository.findAll();
     }
 
     /**
@@ -103,7 +95,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public List<Employee> getAllEmployeesByBank(Bank bank) {
-        return employees.stream()
+        return employeeRepository.findAll().stream()
                 .filter(employee -> employee.getBank().getId() == bank.getId())
                 .collect(Collectors.toList());
     }

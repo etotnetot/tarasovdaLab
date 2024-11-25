@@ -1,25 +1,19 @@
 package tech.reliab.course.toropchinda.bank.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tech.reliab.course.toropchinda.bank.entity.Bank;
 import tech.reliab.course.toropchinda.bank.entity.PaymentAccount;
 import tech.reliab.course.toropchinda.bank.entity.User;
-import tech.reliab.course.toropchinda.bank.service.BankService;
+import tech.reliab.course.toropchinda.bank.repository.PaymentAccountRepository;
 import tech.reliab.course.toropchinda.bank.service.PaymentAccountService;
-import tech.reliab.course.toropchinda.bank.service.UserService;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class PaymentAccountServiceImpl implements PaymentAccountService {
-    private PaymentAccount paymentAccount;
-    private static int paymentAccountCount = 0;
-    private final UserService userService;
-    private final BankService bankService;
-    private final List<PaymentAccount> paymentAccounts = new ArrayList<>();
-
-    public PaymentAccountServiceImpl(UserService userService, BankService bankService) {
-        this.userService = userService;
-        this.bankService = bankService;
-    }
+    @Autowired
+    private PaymentAccountRepository paymentAccountRepository;
 
     /**
      * Создание нового платежного счета.
@@ -27,13 +21,8 @@ public class PaymentAccountServiceImpl implements PaymentAccountService {
     @Override
     public PaymentAccount createPaymentAccount(User user, Bank bank) {
         PaymentAccount paymentAccount = new PaymentAccount(user, bank);
-        paymentAccount.setId(paymentAccountCount++);
-        paymentAccounts.add(paymentAccount);
-        userService.addPaymentAccount(paymentAccount, user);
-        userService.addBank(bank, user);
-        bankService.addClient(bank.getId());
 
-        return paymentAccount;
+        return paymentAccountRepository.save(paymentAccount);
     }
 
     /**
@@ -42,7 +31,7 @@ public class PaymentAccountServiceImpl implements PaymentAccountService {
      */
     @Override
     public Optional<PaymentAccount> getPaymentAccountById(int id) {
-        return paymentAccounts.stream()
+        return paymentAccountRepository.findAll().stream()
                 .filter(paymentAccount -> paymentAccount.getId() == id)
                 .findFirst();
     }
@@ -63,8 +52,7 @@ public class PaymentAccountServiceImpl implements PaymentAccountService {
     @Override
     public void deletePaymentAccount(int id) {
         PaymentAccount paymentAccount = getPaymentAccountIfExists(id);
-        paymentAccounts.remove(paymentAccount);
-        userService.deletePaymentAccount(paymentAccount, paymentAccount.getUser());
+        paymentAccountRepository.delete(paymentAccount);
     }
 
     /**
@@ -72,7 +60,7 @@ public class PaymentAccountServiceImpl implements PaymentAccountService {
      * @return Список всех платежных аккаунтов
      */
     public List<PaymentAccount> getAllPaymentAccounts() {
-        return new ArrayList<>(paymentAccounts);
+        return paymentAccountRepository.findAll();
     }
 
     /**
@@ -82,7 +70,7 @@ public class PaymentAccountServiceImpl implements PaymentAccountService {
      */
     @Override
     public List<PaymentAccount> getAllPaymentAccountsByUserId(int userId) {
-        return paymentAccounts.stream()
+        return paymentAccountRepository.findAll().stream()
                 .filter(account -> account.getUser().getId() == userId)
                 .collect(Collectors.toList());
     }

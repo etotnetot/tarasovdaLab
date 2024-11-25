@@ -1,40 +1,19 @@
 package tech.reliab.course.toropchinda.bank.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tech.reliab.course.toropchinda.bank.entity.Bank;
 import tech.reliab.course.toropchinda.bank.entity.BankAtm;
-import tech.reliab.course.toropchinda.bank.entity.BankOffice;
 import tech.reliab.course.toropchinda.bank.entity.Employee;
 import tech.reliab.course.toropchinda.bank.enums.BankStatus;
+import tech.reliab.course.toropchinda.bank.repository.BankAtmRepository;
 import tech.reliab.course.toropchinda.bank.service.AtmService;
-import tech.reliab.course.toropchinda.bank.service.BankService;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
+@Service
 public class AtmServiceImpl implements AtmService {
-    private static int bankAtmsCount = 0;
-    private List<BankAtm> bankAtms = new ArrayList<>();
-    private BankService bankService;
-
-    public AtmServiceImpl(BankService bankSrv) {
-        this.bankService = bankService;
-    }
-
-    /**
-     * Создание нового банкомата.
-     */
-    public BankAtm createBankAtm(String name, String address, Bank bank, String location, Employee employee,
-                                 boolean cashWithdrawal, boolean cashDeposit, double maintenanceCost) {
-        BankAtm bankAtm = new BankAtm(name, address, bank, location, employee,
-                cashWithdrawal, cashDeposit, maintenanceCost);
-        bankAtm.setId(bankAtmsCount++);
-        bankAtm.setStatus(generateStatus());
-        bankAtm.setBalance(generateAtmMoney(bank));
-        bankService.addAtm(bank.getId());
-        bankAtms.add(bankAtm);
-
-        return bankAtm;
-    }
+    @Autowired
+    private BankAtmRepository bankAtmRepository;
 
     /**
      * Создание нового банкомата
@@ -49,8 +28,13 @@ public class AtmServiceImpl implements AtmService {
      * @return Созданный банкомат (в данный момент возвращает null)
      */
     @Override
-    public BankAtm createBankAtm(String name, String address, Bank bank, BankOffice location, Employee employee, boolean cashWithdrawal, boolean cashDeposit, double maintenanceCost) {
-        return null;
+    public BankAtm createBankAtm(String name, String address, Bank bank, String location, Employee employee, boolean cashWithdrawal, boolean cashDeposit, double maintenanceCost) {
+        BankAtm bankAtm = new BankAtm(name, address, bank, location, employee,
+                cashWithdrawal, cashDeposit, maintenanceCost);
+        bankAtm.setStatus(generateStatus());
+        bankAtm.setBalance(generateAtmMoney(bank));
+
+        return bankAtmRepository.save(bankAtm);
     }
 
     /**
@@ -60,7 +44,7 @@ public class AtmServiceImpl implements AtmService {
      */
     @Override
     public Optional<BankAtm> getAtmById(int id) {
-        return Optional.empty();
+        return Optional.ofNullable(bankAtmRepository.findById((long) id).orElse(null));
     }
 
     /**
@@ -69,7 +53,7 @@ public class AtmServiceImpl implements AtmService {
      */
     @Override
     public List<BankAtm> getAllAtms() {
-        return List.of();
+        return bankAtmRepository.findAll();
     }
 
     /**
@@ -79,36 +63,23 @@ public class AtmServiceImpl implements AtmService {
      */
     @Override
     public List<BankAtm> getAllAtmsByBank(Bank bank) {
-        return List.of();
+        return bankAtmRepository.findAll();
     }
 
     /**
      * Чтение данных банкомата.
      * @param id Идентификатор банкомата
      */
-    public Optional<BankAtm> getBankAtmById(int id) {
-        return bankAtms.stream()
-                .filter(bankAtm -> bankAtm.getId() == id)
-                .findFirst();
-    }
-
-    /**
-     * Обновление данных банкомата.
-     */
-    public void updateBankAtm(int id, String name) {
-        BankAtm bankAtm = getBankAtmIfExists(id);
-        bankAtm.setName(name);
+    public BankAtm getBankAtmById(long id) {
+        return bankAtmRepository.findById(id).orElse(null);
     }
 
     /**
      * Удаление банкомата.
      * @param id Идентификатор банкомата
      */
-    public void deleteBankAtm(int id) {
-        BankAtm bankAtm = getBankAtmIfExists(id);
-        bankAtms.remove(bankAtm);
-        Bank bank = bankAtm.getBank();
-        bankService.removeAtm(bank.getId());
+    public void deleteBankAtm(long id) {
+        bankAtmRepository.deleteById(id);
     }
 
     /**
@@ -133,18 +104,7 @@ public class AtmServiceImpl implements AtmService {
      * @return Список всех банкоматов
      */
     public List<BankAtm> getAllBankAtms() {
-        return new ArrayList<>(bankAtms);
-    }
-
-    /**
-     * Получение всех банкоматов по указанному банку
-     * @param bank Банк для фильтрации банкоматов
-     * @return Список банкоматов, связанных с указанным банком
-     */
-    public List<BankAtm> getAllBankAtmsByBank(Bank bank) {
-        return bankAtms.stream()
-                .filter(bankAtm -> bankAtm.getBank().getId() == bank.getId())
-                .collect(Collectors.toList());
+        return bankAtmRepository.findAll();
     }
 
     /**
@@ -154,6 +114,6 @@ public class AtmServiceImpl implements AtmService {
      * @throws NoSuchElementException если банкомат не найден
      */
     private BankAtm getBankAtmIfExists(int id) {
-        return getBankAtmById(id).orElseThrow(() -> new NoSuchElementException("BankAtm was not found"));
+        return getBankAtmById(id);
     }
 }

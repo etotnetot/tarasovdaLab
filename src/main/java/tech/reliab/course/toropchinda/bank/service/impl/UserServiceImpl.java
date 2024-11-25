@@ -1,17 +1,19 @@
 package tech.reliab.course.toropchinda.bank.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tech.reliab.course.toropchinda.bank.entity.Bank;
-import tech.reliab.course.toropchinda.bank.entity.CreditAccount;
-import tech.reliab.course.toropchinda.bank.entity.PaymentAccount;
 import tech.reliab.course.toropchinda.bank.entity.User;
+import tech.reliab.course.toropchinda.bank.repository.*;
 import tech.reliab.course.toropchinda.bank.service.UserService;
 
 import java.time.LocalDate;
 import java.util.*;
 
+@Service
 public class UserServiceImpl implements UserService {
-    private static int usersCount = 0;
-    private final List<User> users = new ArrayList<>();
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Создание нового пользователя.
@@ -21,11 +23,9 @@ public class UserServiceImpl implements UserService {
     public User create(String fullName, LocalDate birthDate, String job) {
         User user = new User(0, fullName, birthDate, job);
         user.setCreditRating(calculateCreditRating(user));
-        user.setId(usersCount++);
         user.setMonthlyIncome(new Random().nextInt(1001));
-        users.add(user);
 
-        return user;
+        return userRepository.save(user);
     }
 
     /**
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Optional<User> getUserById(int id) {
-        return users.stream()
+        return userRepository.findAll().stream()
                 .filter(user -> user.getId() == id)
                 .findFirst();
     }
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> getAllUsers() {
-        return users;
+        return userRepository.findAll();
     }
 
     /**
@@ -84,79 +84,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserIfExists(int id) {
         return getUserById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
-    }
-
-    /**
-     * Добавление кредитного аккаунта пользователю
-     * @param creditAccount Кредитный аккаунт для добавления
-     * @param user Пользователь, которому добавляется аккаунт
-     */
-    @Override
-    public void addCreditAccount(CreditAccount creditAccount, User user) {
-        List<CreditAccount> creditAccounts = user.getCreditAccounts();
-        creditAccounts.add(creditAccount);
-        user.setCreditAccounts(creditAccounts);
-    }
-
-    /**
-     * Добавление платежного аккаунта пользователю
-     * @param paymentAccount Платежный аккаунт для добавления
-     * @param user Пользователь, которому добавляется аккаунт
-     */
-    @Override
-    public void addPaymentAccount(PaymentAccount paymentAccount, User user) {
-        List<PaymentAccount> paymentAccounts = user.getPaymentAccounts();
-        paymentAccounts.add(paymentAccount);
-        user.setPaymentAccounts(paymentAccounts);
-    }
-
-    /**
-     * Добавление банка пользователю
-     * @param bank Банк для добавления
-     * @param user Пользователь, которому добавляется банк
-     */
-    @Override
-    public void addBank(Bank bank, User user) {
-        List<Bank> banks = user.getBanks();
-        banks.add(bank);
-        user.setBanks(banks);
-    }
-
-    /**
-     * Удаление кредитного аккаунта у пользователя
-     * @param creditAccount Кредитный аккаунт для удаления
-     * @param user Пользователь, у которого удаляется аккаунт
-     */
-    @Override
-    public void deleteCreditAccount(CreditAccount creditAccount, User user) {
-        List<CreditAccount> creditAccounts = user.getCreditAccounts();
-        creditAccounts.remove(creditAccount);
-        user.setCreditAccounts(creditAccounts);
-    }
-
-    /**
-     * Удаление платежного аккаунта у пользователя
-     * @param paymentAccount Платежный аккаунт для удаления
-     * @param user Пользователь, у которого удаляется аккаунт
-     */
-    @Override
-    public void deletePaymentAccount(PaymentAccount paymentAccount, User user) {
-        List<PaymentAccount> paymentAccounts = user.getPaymentAccounts();
-        paymentAccounts.remove(paymentAccount);
-        user.setPaymentAccounts(paymentAccounts);
-    }
-
-    /**
-     * Удаление банка у всех пользователей
-     * @param bank Банк для удаления
-     */
-    @Override
-    public void deleteBank(Bank bank) {
-        for (User user : users) {
-            List<Bank> banks = user.getBanks();
-            banks.remove(bank);
-            user.setBanks(banks);
-        }
     }
 
     /**

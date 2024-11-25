@@ -17,17 +17,5 @@ public interface UserService {
 
     User getUserIfExists(int id);
 
-    void addCreditAccount(CreditAccount creditAccount, User user);
-
-    void addPaymentAccount(PaymentAccount paymentAccount, User user);
-
-    void addBank(Bank bank, User user);
-
-    void deleteCreditAccount(CreditAccount creditAccount, User user);
-
-    void deletePaymentAccount(PaymentAccount paymentAccount, User user);
-
-    void deleteBank(Bank bank);
-
     List<User> getUsersByBank(Bank bank);
 }

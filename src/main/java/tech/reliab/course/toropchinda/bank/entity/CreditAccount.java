@@ -1,14 +1,18 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
 import java.time.LocalDate;
-
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
 public class CreditAccount {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @ManyToOne
     private User user;
     private String bankName;
     private LocalDate startDate;
@@ -17,8 +21,11 @@ public class CreditAccount {
     private double loanAmount;
     private double monthlyPayment;
     private double interestRate;
+    @ManyToOne
     private Employee employee;
+    @ManyToOne
     private PaymentAccount paymentAccount;
+    @ManyToOne
     private Bank bank;
 
     /**
@@ -42,6 +49,8 @@ public class CreditAccount {
         this.paymentAccount = paymentAccount;
         this.bank = bank;
     }
+
+    public CreditAccount() { }
 
     /**
      * Переопределение метода toString() для аккаунта.

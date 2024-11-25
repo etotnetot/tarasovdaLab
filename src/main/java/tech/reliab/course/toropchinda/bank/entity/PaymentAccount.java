@@ -1,15 +1,21 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
 public class PaymentAccount {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @ManyToOne
     private User user;
     private String bankName;
     private double balance;
+    @ManyToOne
     private Bank bank;
 
     /**
@@ -22,6 +28,8 @@ public class PaymentAccount {
         this.balance = 0;
         this.bank = bank;
     }
+
+    public PaymentAccount() { }
 
     /**
      * Переопределение метода toString() для аккаунта.

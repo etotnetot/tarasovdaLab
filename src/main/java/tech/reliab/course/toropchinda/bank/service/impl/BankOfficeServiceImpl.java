@@ -1,22 +1,19 @@
 package tech.reliab.course.toropchinda.bank.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tech.reliab.course.toropchinda.bank.entity.Bank;
 import tech.reliab.course.toropchinda.bank.entity.BankOffice;
 import tech.reliab.course.toropchinda.bank.enums.BankStatus;
+import tech.reliab.course.toropchinda.bank.repository.BankOfficeRepository;
 import tech.reliab.course.toropchinda.bank.service.BankOfficeService;
-import tech.reliab.course.toropchinda.bank.service.BankService;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class BankOfficeServiceImpl implements BankOfficeService {
-    private static int bankOfficesCount = 0;
-    private List<BankOffice> bankOffices = new ArrayList<>();
-    private final BankService bankService;
-
-    public BankOfficeServiceImpl(BankService bankService) {
-        this.bankService = bankService;
-    }
+    @Autowired
+    private BankOfficeRepository bankOfficeRepository;
 
     /**
      * Создание нового офиса.
@@ -26,13 +23,10 @@ public class BankOfficeServiceImpl implements BankOfficeService {
                                        boolean canIssueLoan, boolean cashWithdrawal, boolean cashDeposit,
                                        double rentCost, Bank bank) {
         BankOffice bankOffice = new BankOffice(name, address, bank, rentCost);
-        bankOffice.setId(bankOfficesCount++);
         bankOffice.setStatus(generateStatus());
         bankOffice.setBalance(generateOfficeMoney(bank));
-        bankOffices.add(bankOffice);
-        bankService.addOffice(bank.getId());
 
-        return bankOffice;
+        return bankOfficeRepository.save(bankOffice);
     }
 
     /**
@@ -40,30 +34,8 @@ public class BankOfficeServiceImpl implements BankOfficeService {
      * @param id Идентификатор офиса
      */
     @Override
-    public Optional<BankOffice> getBankOfficeById(int id) {
-        return bankOffices.stream()
-                .filter(bankOffice -> bankOffice.getId() == id)
-                .findFirst();
-    }
-
-    /**
-     * Обновление данных офиса.
-     */
-    @Override
-    public void updateBankOffice(int id, String name) {
-        BankOffice bankOffice = getBankOfficeIfExists(id);
-        bankOffice.setName(name);
-    }
-
-    /**
-     * Удаление офиса.
-     * @param bankId Идентификатор банка
-     */
-    @Override
-    public void deleteBankAtm(int officeId, int bankId) {
-        BankOffice bankOffice = getBankOfficeIfExists(officeId);
-        bankOffices.remove(bankOffice);
-        bankService.removeOffice(bankId);
+    public BankOffice getBankOfficeById(long id) {
+        return bankOfficeRepository.findById(id).orElse(null);
     }
 
     /**
@@ -79,29 +51,14 @@ public class BankOfficeServiceImpl implements BankOfficeService {
      * @return Список всех офисов банка
      */
     public List<BankOffice> getAllBankOffices() {
-        return new ArrayList<>(bankOffices);
+        return bankOfficeRepository.findAll();
     }
 
-    /**
-     * Получение всех офисов по указанному банку
-     * @param bank Банк для фильтрации офисов
-     * @return Список офисов, связанных с указанным банком
-     */
     @Override
     public List<BankOffice> getAllBankOfficesByBank(Bank bank) {
-        return bankOffices.stream()
+        return bankOfficeRepository.findAll().stream()
                 .filter(bankOffice -> bankOffice.getBankId() == bank.getId())
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * Получение офиса банка по идентификатору, если он существует
-     * @param id Идентификатор офиса банка
-     * @return Офис банка, если найден, иначе выбрасывается исключение
-     * @throws NoSuchElementException если офис не найден
-     */
-    private BankOffice getBankOfficeIfExists(int id) {
-        return getBankOfficeById(id).orElseThrow(() -> new NoSuchElementException("BankOffice was not found"));
     }
 
     /**

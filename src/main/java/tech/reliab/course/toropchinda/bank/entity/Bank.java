@@ -1,11 +1,20 @@
 package tech.reliab.course.toropchinda.bank.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
 public class Bank {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter(AccessLevel.NONE)
     private int id;
     private String name;
     public int officesCount;
@@ -32,6 +41,8 @@ public class Bank {
         this.totalMoney = Math.random() * 1000000;
         this.interestRate = Math.max(0, 20 - (rating / 5.0));
     }
+
+    public Bank() { }
 
     /**
      * Переопределение метода toString() для банка.

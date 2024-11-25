@@ -1,9 +1,11 @@
 package tech.reliab.course.toropchinda.bank;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import tech.reliab.course.toropchinda.bank.entity.*;
 import tech.reliab.course.toropchinda.bank.service.*;
-import tech.reliab.course.toropchinda.bank.service.impl.*;
-
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -11,20 +13,32 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
-public class Main {
-    private static List<String> userFirstNames = Arrays.asList("Дима", "Дмитрий", "Митя");
-    private static List<String> userLastNames = Arrays.asList("Кальянов", "Пепсов", "Николаев");
+@SpringBootApplication
+public class TBankApplication implements CommandLineRunner {
     private static Integer totalBanks = 5;
-    static UserService userSrv = new UserServiceImpl();
-    static BankService bankSrv = new BankServiceImpl(userSrv);
-    static EmployeeService empSrv = new EmployeeServiceImpl(bankSrv);
-    static AtmService atmSrv = new AtmServiceImpl(bankSrv);
-    static PaymentAccountService payAccSrv = new PaymentAccountServiceImpl(userSrv, bankSrv);
-    static CreditAccountService creditAccSrv = new CreditAccountServiceImpl(userSrv, bankSrv);
-    static BankOfficeService officeSrv = new BankOfficeServiceImpl(bankSrv);
 
-    private static List<Bank> setupBanks() {
-        return IntStream.range(0, totalBanks)
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private BankService bankService;
+    @Autowired
+    private EmployeeService employeeService;
+    @Autowired
+    private AtmService atmService;
+    @Autowired
+    private PaymentAccountService paymentAccountService;
+    @Autowired
+    private CreditAccountService creditAccountService;
+    @Autowired
+    private BankOfficeService officeService;
+
+    public static void main(String[] args) {
+        SpringApplication.run(TBankApplication.class, args);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        var banks = IntStream.range(0, totalBanks)
                 .mapToObj(idx -> {
                     String bankName = String.format("Мега Банк %d", idx);
                     int id = new Random().nextInt(Integer.MAX_VALUE);
@@ -35,11 +49,8 @@ public class Main {
                     return new Bank(id, bankName, rating, totalMoney, interestRate);
                 })
                 .toList();
-    }
 
-    public static void main(String[] args) throws IOException {
-        var banks = setupBanks();
-        banks.forEach(Main::initializeBankDetails);
+        banks.forEach(this::initializeBankDetails);
 
         System.out.println("Выберите опцию:");
         System.out.println("1. Просмотреть банк");
@@ -56,8 +67,8 @@ public class Main {
         }
     }
 
-    private static void displayBankInfo() {
-        var banks = bankSrv.getAllBanks();
+    private void displayBankInfo() {
+        var banks = bankService.getAllBanks();
 
         for (var bank : banks) {
             System.out.println(bank);
@@ -68,27 +79,25 @@ public class Main {
         System.out.println("Введите ID банка");
         var bankId = scanner.nextInt();
 
-        var selectedBank = bankSrv.getBankById(bankId);
-        if (selectedBank.isEmpty())
-            return;
+        var selectedBank = bankService.getBankById(bankId);
 
-        System.out.println(selectedBank.get());
+        System.out.println(selectedBank);
 
         System.out.println("Банкоматы:");
-        System.out.println(atmSrv.getAllAtmsByBank(selectedBank.get()));
+        System.out.println(atmService.getAllAtmsByBank(selectedBank));
 
         System.out.println("Офисы:");
-        System.out.println(officeSrv.getAllBankOfficesByBank(selectedBank.get()));
+        System.out.println(officeService.getAllBankOfficesByBank(selectedBank));
 
         System.out.println("Сотрудники:");
-        System.out.println(empSrv.getAllEmployeesByBank(selectedBank.get()));
+        System.out.println(employeeService.getAllEmployeesByBank(selectedBank));
 
         System.out.println("Клиенты:");
-        System.out.println(userSrv.getUsersByBank(selectedBank.get()));
+        System.out.println(userService.getUsersByBank(selectedBank));
     }
 
-    private static void displayUserInfo() {
-        var users = userSrv.getAllUsers();
+    private void displayUserInfo() {
+        var users = userService.getAllUsers();
         for (var user : users) {
             System.out.println(user);
         }
@@ -97,12 +106,12 @@ public class Main {
 
         System.out.println("Введите ID пользователя");
         var userId = scanner.nextInt();
-        var user = userSrv.getUserById(userId);
+        var user = userService.getUserById(userId);
 
         if (user.isEmpty()) return;
 
-        var creditAccounts = creditAccSrv.getCreditAccountByUserId(user.get().getId());
-        var paymentAccounts = payAccSrv.getAllPaymentAccountsByUserId(user.get().getId());
+        var creditAccounts = creditAccountService.getCreditAccountByUserId(user.get().getId());
+        var paymentAccounts = paymentAccountService.getAllPaymentAccountsByUserId(user.get().getId());
 
         System.out.println("Кредитные счета:");
         System.out.println(creditAccounts);
@@ -111,19 +120,19 @@ public class Main {
         System.out.println(paymentAccounts);
     }
 
-    private static void initializeBankDetails(Bank bank) {
-        bankSrv.registerBank(bank);
+    private void initializeBankDetails(Bank bank) {
+        bankService.registerBank(bank);
         int numEmployees = 5;
         int numOffices = 5;
         int numAtms = 5;
 
         List<User> clients = Arrays.asList(
-                userSrv.create("Павел Иванович", LocalDate.now(), "Разработчик"),
-                userSrv.create("Анна Сергеевна", LocalDate.now(), "Тестировщик"),
-                userSrv.create("Игорь Петрович", LocalDate.now(), "Аналитик")
+                userService.create("Павел Иванович", LocalDate.now(), "Разработчик"),
+                userService.create("Анна Сергеевна", LocalDate.now(), "Тестировщик"),
+                userService.create("Игорь Петрович", LocalDate.now(), "Аналитик")
         );
 
-        var offices = IntStream.range(0, numOffices).boxed().map((idx) -> officeSrv.createBankOffice(
+        var offices = IntStream.range(0, numOffices).boxed().map((idx) -> officeService.createBankOffice(
                 String.format("Главный офис %d", idx),
                 "Ленинский проспект 30",
                 true,
@@ -134,7 +143,7 @@ public class Main {
                 bank
         )).toList();
 
-        var employees = IntStream.range(0, numEmployees).boxed().map((idx) -> empSrv.createEmployee(
+        var employees = IntStream.range(0, numEmployees).boxed().map((idx) -> employeeService.createEmployee(
                 String.format("Смирнова Татьяна%d Алексеевна", idx),
                 LocalDate.now(),
                 "Сотрудник банка",
@@ -146,11 +155,11 @@ public class Main {
         )).toList();
 
         var atms = IntStream.range(0, numAtms).boxed().map((idx) ->
-                atmSrv.createBankAtm(
+                atmService.createBankAtm(
                         "Надежный банкомат",
                         "Ленинский проспект 30",
                         bank,
-                        offices.get(idx % offices.size()),
+                        String.valueOf(offices.get(idx % offices.size())),
                         employees.get(idx % employees.size()),
                         true,
                         true,
@@ -158,9 +167,9 @@ public class Main {
                 )).toList();
 
         for (var client : clients) {
-            PaymentAccount payAccount = payAccSrv.createPaymentAccount(client, bank);
+            PaymentAccount payAccount = paymentAccountService.createPaymentAccount(client, bank);
 
-            CreditAccount creditAcc = creditAccSrv.createCreditAccount(
+            CreditAccount creditAcc = creditAccountService.createCreditAccount(
                     client,
                     bank,
                     LocalDate.now(),
@@ -171,9 +180,9 @@ public class Main {
                     payAccount
             );
 
-            payAccSrv.createPaymentAccount(client, bank);
+            paymentAccountService.createPaymentAccount(client, bank);
 
-            creditAccSrv.createCreditAccount(
+            creditAccountService.createCreditAccount(
                     client,
                     bank,
                     LocalDate.now(),
